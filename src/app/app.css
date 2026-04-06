@@ -33,12 +33,11 @@ body.simple-mode::before {
 
 body.berry-mode {
   color: #f8f7ff !important;
-  background: red !important; /* TEMPORARY: Bright red background to test if class is applied */
-  border-top: 4px solid #ff6fd8 !important; /* Visible berry indicator */
-  background-image: none !important; /* Override any background-image */
-  border: 5px solid yellow !important; /* EXTRA VISIBLE INDICATOR */
-  margin: 0 !important;
-  padding: 20px !important;
+  background: radial-gradient(circle at top left, rgba(221, 119, 181, 0.22), transparent 25%),
+              radial-gradient(circle at bottom right, rgba(179, 62, 121, 0.22), transparent 20%),
+              linear-gradient(180deg, #21081e 0%, #3a0f33 45%, #5b1a49 100%) !important;
+  margin: 0;
+  padding: 0;
 }
 
 body.berry-mode::before {
@@ -480,16 +479,25 @@ body.berry-mode .btn {
     z-index: 1040;
     overflow-y: auto;
     display: block !important;
-  }
-
-  .navbar:hover .navbar-collapse,
-  .navbar-toggler:hover + .navbar-collapse,
-  .navbar-collapse:hover {
-    transform: translateX(0);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .navbar-collapse.show {
     transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .navbar-collapse.collapsing {
+    height: 100vh !important;
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform 0.35s ease;
   }
 
   .navbar-nav {
@@ -1322,7 +1330,91 @@ body {
   animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
 }
 
-/* TEMPORARY TEST: Make everything red in berry mode */
-body.berry-mode * {
-  color: red !important;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  #home {
+    min-height: auto;
+    padding-top: 6.5rem !important;
+    padding-bottom: 3.5rem !important;
+  }
+
+  .hero-animation {
+    width: min(78vw, 290px);
+    height: min(78vw, 290px);
+    min-width: 220px;
+    min-height: 220px;
+    margin-top: 1.5rem;
+  }
+
+  .hero-title {
+    white-space: normal;
+    border-right: none;
+    animation: fadeInUp 0.8s ease-out;
+    line-height: 1.2;
+    font-size: clamp(1.7rem, 6vw, 2.3rem);
+  }
+
+  #home p {
+    font-size: 1rem;
+  }
+
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .card:hover,
+  .btn:hover,
+  #testimonials .card:hover {
+    transform: none;
+  }
+
+  .contact-panel,
+  .review-panel {
+    padding: 1.25rem;
+  }
+
+  .floating-contact-panel {
+    width: calc(100% - 24px);
+    right: 12px;
+    left: 12px;
+    bottom: 12px;
+    align-items: stretch;
+  }
+
+  .floating-action-btn.floating-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .navbar-brand .logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  #pricing .card,
+  #testimonials .card {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .stat-card h3 {
+    font-size: 1.8rem;
+  }
 }

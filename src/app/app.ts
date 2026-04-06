@@ -425,6 +425,7 @@ Best regards,
 
     // Plan button auto-selection and message draft
     this.setupPlanSelection();
+    this.setupMobileNavbar();
 
     // Navbar background change on scroll
     window.addEventListener('scroll', () => {
@@ -473,6 +474,49 @@ Best regards,
           messageInput?.focus();
         }, 350);
       });
+    });
+  }
+
+  private setupMobileNavbar() {
+    const toggler = document.querySelector('.navbar-toggler') as HTMLButtonElement | null;
+    const collapseEl = document.getElementById('navbarNav');
+    if (!toggler || !collapseEl) return;
+
+    const closeMenu = () => {
+      const bootstrap = (window as any).bootstrap;
+      if (!bootstrap?.Collapse) return;
+      const instance = bootstrap.Collapse.getOrCreateInstance(collapseEl, { toggle: false });
+      instance.hide();
+    };
+
+    document.querySelectorAll('.navbar-nav .nav-link').forEach((link) => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          closeMenu();
+        }
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768 && collapseEl.classList.contains('show')) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (window.innerWidth > 768 || !collapseEl.classList.contains('show')) return;
+      const target = event.target as Node;
+      const clickedInsideMenu = collapseEl.contains(target);
+      const clickedToggler = toggler.contains(target);
+      if (!clickedInsideMenu && !clickedToggler) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && collapseEl.classList.contains('show')) {
+        closeMenu();
+      }
     });
   }
 
@@ -535,7 +579,7 @@ Best regards,
     const nameInput = document.getElementById('name') as HTMLInputElement;
     const emailInput = document.getElementById('email') as HTMLInputElement;
     const phoneInput = document.getElementById('phone') as HTMLInputElement;
-    const issueInput = document.getElementById('issue') as HTMLInputElement;
+    const issueInput = document.getElementById('issue') as HTMLSelectElement;
     const messageInput = document.getElementById('message') as HTMLTextAreaElement;
 
     const name = nameInput?.value;
@@ -544,14 +588,28 @@ Best regards,
     const issue = issueInput?.value;
     const message = messageInput?.value;
 
-    // Simple validation
-    if (name && email && issue && message) {
-      alert(`Thank you for contacting BerryTech, ${name}! Our support team will get back to you within 24 hours regarding your ${issue} issue.`);
-      const form = document.getElementById('contactForm') as HTMLFormElement;
-      form?.reset();
-    } else {
+    if (!name || !email || !issue || !message) {
       alert('Please fill in all required fields.');
+      return;
     }
+
+    const issueText = issueInput?.options?.[issueInput.selectedIndex]?.text || issue;
+    const subject = encodeURIComponent(`Support Request - ${issueText}`);
+    const bodyContent = `Hello BerryTech Team,\n\n` +
+      `I need support with the following issue:\n\n` +
+      `Name: ${name}\n` +
+      `Email: ${email}\n` +
+      `Phone: ${phone || 'Not provided'}\n` +
+      `Issue Type: ${issueText}\n\n` +
+      `Issue Details:\n${message}\n\n` +
+      `Thank you.`;
+    const body = encodeURIComponent(bodyContent);
+
+    this.sendEmail(subject, body);
+    alert('Your email draft is ready. Please click Send in your email app.');
+
+    const form = document.getElementById('contactForm') as HTMLFormElement;
+    form?.reset();
   }
 
   private handleReviewSubmission() {
@@ -591,13 +649,37 @@ Best regards,
     const mailtoUrl = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
 
     if (this.isMobileDevice()) {
-      window.location.href = mailtoUrl;
-    } else {
-      window.open(`https://mail.google.com/mail/?view=cm&to=${emailAddress}&su=${subject}&body=${body}`, '_blank');
-      setTimeout(() => {
-        window.open(`https://outlook.live.com/mail/0/deeplink/compose?to=${emailAddress}&subject=${subject}&body=${body}`, '_blank');
-      }, 1200);
+      if (this.isIOSDevice()) {
+        // iOS order: Gmail app -> Outlook app -> Apple Mail/default mail app.
+        window.location.href = `googlegmail://co?to=${emailAddress}&subject=${subject}&body=${body}`;
+        setTimeout(() => {
+          window.location.href = `ms-outlook://compose?to=${emailAddress}&subject=${subject}&body=${body}`;
+        }, 700);
+        setTimeout(() => {
+          window.location.href = mailtoUrl;
+        }, 1400);
+        return;
+      }
+
+      if (this.isAndroidDevice()) {
+        // Android order: Gmail app -> Outlook app -> default mail app.
+        window.location.href = `intent://compose?to=${emailAddress}&subject=${subject}&body=${body}#Intent;scheme=googlegmail;package=com.google.android.gm;end`;
+        setTimeout(() => {
+          window.location.href = `intent://compose?to=${emailAddress}&subject=${subject}&body=${body}#Intent;scheme=ms-outlook;package=com.microsoft.office.outlook;end`;
+        }, 700);
+        setTimeout(() => {
+          window.location.href = mailtoUrl;
+        }, 1400);
+        return;
+      }
     }
+
+    // Desktop/non-mobile order: default mail app (Outlook/Apple Mail/etc.) -> Gmail web fallback.
+    window.location.href = mailtoUrl;
+    setTimeout(() => {
+      const gmailWebCompose = `https://mail.google.com/mail/?view=cm&to=${emailAddress}&su=${subject}&body=${body}`;
+      window.open(gmailWebCompose, '_blank');
+    }, 900);
   }
 
   private setFallbackContact() {
