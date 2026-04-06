@@ -1,0 +1,87 @@
+{
+  "company": {
+    "name": "BerryTech",
+    "tagline": "Your trusted partner for software and device support",
+    "copyright": "© 2026 BerryTech. All rights reserved."
+  },
+  "contact": {
+    "email": "support@berrytech.com",
+    "phone": "+1 (123) 456-7890",
+    "whatsapp": "+11234567890",
+    "supportHours": "24/7 Support Available",
+    "location": "Remote Support Worldwide"
+  },
+  "social": {
+    "facebook": "#",
+    "twitter": "#",
+    "linkedin": "#"
+  },
+  "features": [
+    "Certified Technicians",
+    "Fast Response Time",
+    "Money-Back Guarantee",
+    "Secure & Confidential"
+  ],
+  "pricing": {
+    "usd": {
+      "basic": {
+        "price": 10,
+        "period": "Per Issue",
+        "issues": "1 Issue",
+        "resolution": "24-48 Hours",
+        "features": ["Single Issue Resolution", "Remote Support", "Basic Troubleshooting", "30-Day Warranty"]
+      },
+      "standard": {
+        "price": 35,
+        "period": "Per Session",
+        "issues": "4-5 Issues",
+        "resolution": "Same Day",
+        "features": ["Multiple Issues", "Priority Support", "System Optimization", "Software Installation", "90-Day Warranty"]
+      },
+      "expert": {
+        "price": 75,
+        "period": "Per Month",
+        "issues": "10 Issues",
+        "resolution": "Next Business Day",
+        "features": ["Advanced Support", "Virus Removal", "Network Setup", "Device Configuration", "Monthly Maintenance", "Priority Hotline"]
+      },
+      "pro_expert": {
+        "price": 99,
+        "period": "One-time Lifetime",
+        "issues": "Unlimited",
+        "resolution": "24/7 Priority",
+        "features": ["Lifetime Unlimited Support", "24/7 Emergency Access", "Proactive Monitoring", "Custom Solutions", "Training Sessions", "VIP Support Line"]
+      }
+    },
+    "inr": {
+      "basic": {
+        "price": 800,
+        "period": "Per Issue",
+        "issues": "1 Issue",
+        "resolution": "24-48 Hours",
+        "features": ["Single Issue Resolution", "Remote Support", "Basic Troubleshooting", "30-Day Warranty"]
+      },
+      "standard": {
+        "price": 2900,
+        "period": "Per Session",
+        "issues": "4-5 Issues",
+        "resolution": "Same Day",
+        "features": ["Multiple Issues", "Priority Support", "System Optimization", "Software Installation", "90-Day Warranty"]
+      },
+      "expert": {
+        "price": 6200,
+        "period": "Per Month",
+        "issues": "10 Issues",
+        "resolution": "Next Business Day",
+        "features": ["Advanced Support", "Virus Removal", "Network Setup", "Device Configuration", "Monthly Maintenance", "Priority Hotline"]
+      },
+      "pro_expert": {
+        "price": 8200,
+        "period": "One-time Lifetime",
+        "issues": "Unlimited",
+        "resolution": "24/7 Priority",
+        "features": ["Lifetime Unlimited Support", "24/7 Emergency Access", "Proactive Monitoring", "Custom Solutions", "Training Sessions", "VIP Support Line"]
+      }
+    }
+  }
+}
